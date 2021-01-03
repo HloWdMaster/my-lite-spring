@@ -4,7 +4,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.listespring.util.ClassUtils;
+import org.litespring.util.ClassUtils;
 import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.GenericBeanDefinition;
 import org.litespring.beans.factory.BeanFactory;
