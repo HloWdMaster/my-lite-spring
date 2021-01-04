@@ -1,6 +1,7 @@
 package org.litespring.test.v1;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.factory.BeanCreationException;
@@ -16,10 +17,17 @@ import static org.junit.Assert.assertNotNull;
 
 public class BeanFactoryTest {
 
+    DefaultBeanFactory factory = null;
+    XmlBeanDefinitonReader reader = null;
+
+    @Before
+    public void setUp() {
+        factory = new DefaultBeanFactory();
+        reader = new XmlBeanDefinitonReader(factory);
+    }
+
     @Test
     public void testGetBean() {
-        DefaultBeanFactory factory = new DefaultBeanFactory();
-        XmlBeanDefinitonReader reader = new XmlBeanDefinitonReader(factory);
 
         reader.loadBeanDefinition("petstore-v1.xml");
         BeanDefinition bd = factory.getBeanDefinition("petStore");
@@ -31,8 +39,6 @@ public class BeanFactoryTest {
 
     @Test
     public void testInvalidBean() {
-        DefaultBeanFactory factory = new DefaultBeanFactory();
-        XmlBeanDefinitonReader reader = new XmlBeanDefinitonReader(factory);
         reader.loadBeanDefinition("petstore-v1.xml");        try {
             factory.getBean("invalidBean");
         } catch (BeanCreationException e) {
@@ -45,8 +51,6 @@ public class BeanFactoryTest {
     public void invalidXML() {
 
         try {
-            DefaultBeanFactory factory = new DefaultBeanFactory();
-            XmlBeanDefinitonReader reader = new XmlBeanDefinitonReader(factory);
             reader.loadBeanDefinition("xxx.xml");
         } catch (BeanDefinitionStoreException e) {
             return;
