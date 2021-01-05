@@ -8,24 +8,15 @@ import org.litespring.core.io.ClassPathResource;
 import org.litespring.core.io.FileSystemResource;
 import org.litespring.core.io.Resource;
 
-public class FileSystemXmlApplicationContext implements ApplicationContext {
+public class FileSystemXmlApplicationContext extends AbstractApplicationContext {
 
-    private DefaultBeanFactory factory;
 
     public FileSystemXmlApplicationContext(String configFile) {
-        factory = new DefaultBeanFactory();
-        XmlBeanDefinitonReader reader = new XmlBeanDefinitonReader(factory);
-        Resource resource = new FileSystemResource(configFile);
-        reader.loadBeanDefinition(resource);
+        super(configFile);
     }
 
     @Override
-    public BeanDefinition getBeanDefinition(String beanID) {
-        return factory.getBeanDefinition(beanID);
-    }
-
-    @Override
-    public Object getBean(String beanID) {
-        return factory.getBean(beanID);
+    protected Resource getResourceByPath(String path) {
+        return new FileSystemResource(path);
     }
 }

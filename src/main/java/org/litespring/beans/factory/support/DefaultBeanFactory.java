@@ -18,8 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultBeanFactory implements BeanFactory,BeanDefinitionRegistry{
 
-
-
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>(64);
 
     public DefaultBeanFactory() {
