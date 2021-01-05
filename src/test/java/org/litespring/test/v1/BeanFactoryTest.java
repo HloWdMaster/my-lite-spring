@@ -6,8 +6,6 @@ import org.junit.Test;
 import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.factory.BeanCreationException;
 import org.litespring.beans.factory.BeanDefinitionStoreException;
-import org.litespring.beans.factory.BeanFactory;
-import org.litespring.beans.factory.support.BeanDefinitionRegistry;
 import org.litespring.beans.factory.support.DefaultBeanFactory;
 import org.litespring.beans.factory.xml.XmlBeanDefinitonReader;
 import org.litespring.core.io.ClassPathResource;

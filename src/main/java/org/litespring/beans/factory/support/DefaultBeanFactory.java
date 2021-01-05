@@ -1,28 +1,20 @@
 package org.litespring.beans.factory.support;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-import org.litespring.beans.factory.BeanCreationException;
-import org.litespring.beans.factory.BeanDefinitionStoreException;
-import org.litespring.util.ClassUtils;
 import org.litespring.beans.BeanDefinition;
-import org.litespring.beans.factory.BeanFactory;
+import org.litespring.beans.factory.BeanCreationException;
+import org.litespring.beans.factory.config.ConfigurableBeanFactory;
+import org.litespring.util.ClassUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DefaultBeanFactory implements BeanFactory,BeanDefinitionRegistry{
+public class DefaultBeanFactory implements ConfigurableBeanFactory, BeanDefinitionRegistry {
 
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>(64);
+    private ClassLoader beanClassLoader;
 
     public DefaultBeanFactory() {
     }
-
 
 
     @Override
@@ -32,13 +24,13 @@ public class DefaultBeanFactory implements BeanFactory,BeanDefinitionRegistry{
 
     @Override
     public void registerBeanDefinition(String beanID, BeanDefinition bd) {
-        this.beanDefinitionMap.put(beanID,bd);
+        this.beanDefinitionMap.put(beanID, bd);
     }
 
     @Override
-    public Object getBean(String beanID)  {
+    public Object getBean(String beanID) {
         BeanDefinition bd = this.getBeanDefinition(beanID);
-        if(bd == null){
+        if (bd == null) {
             throw new BeanCreationException("Bean Definition does not exsit");
         }
         ClassLoader cl = ClassUtils.getDefaultClassLoader();
@@ -47,7 +39,17 @@ public class DefaultBeanFactory implements BeanFactory,BeanDefinitionRegistry{
             Class<?> clz = cl.loadClass(beanClassName);
             return clz.newInstance();
         } catch (Exception e) {
-            throw new BeanCreationException("create bean for "+ beanClassName +" failed",e);
+            throw new BeanCreationException("create bean for " + beanClassName + " failed", e);
         }
+    }
+
+    @Override
+    public void setBeanClassLoader(ClassLoader beanClassLoader) {
+        this.beanClassLoader = beanClassLoader;
+    }
+
+    @Override
+    public ClassLoader getBeanClassLoader() {
+        return (this.beanClassLoader != null ? this.beanClassLoader : ClassUtils.getDefaultClassLoader());
     }
 }
