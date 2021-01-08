@@ -20,5 +20,7 @@ public class ApplicationContextTestV2 {
         Assert.assertTrue(service.getAccountDao() instanceof AccountDao);
         Assert.assertTrue(service.getItemDao() instanceof ItemDao);
 
+        Assert.assertEquals("dadongge", service.getOwner());
+
     }
 }
