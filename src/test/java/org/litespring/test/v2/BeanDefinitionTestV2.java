@@ -21,7 +21,7 @@ public class BeanDefinitionTestV2 {
 
         BeanDefinition bd = factory.getBeanDefinition("petStore");
         List<PropertyValue> pvs = bd.getPropertyValues();
-        Assert.assertTrue(pvs.size() == 3);
+        Assert.assertTrue(pvs.size() == 4);
         {
             PropertyValue pv = this.getPropertyValue("accountDao",pvs);
             Assert.assertNotNull(pv);
@@ -32,6 +32,7 @@ public class BeanDefinitionTestV2 {
             Assert.assertNotNull(pv);
             Assert.assertTrue(pv.getValue()  instanceof RuntimeBeanReference);
         }
+
     }
 
     private PropertyValue getPropertyValue(String beanID, List<PropertyValue> pvs) {

@@ -75,12 +75,13 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
                 PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
                 for (PropertyDescriptor pd : pds) {
                     if (pd.getName().equals(propertyName)) {
-                        converter.convertIfNecessary(resolvedValue,pd.getPropertyType());
-                        pd.getWriteMethod().invoke(bean,resolvedValue);
+                        Object converted = converter.convertIfNecessary(resolvedValue, pd.getPropertyType());
+                        pd.getWriteMethod().invoke(bean,converted);
                     }
                 }
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new BeanCreationException("Failed to obtain BeanInfo for class [" + bd.getBeanClassName() + "]");
         }
     }
