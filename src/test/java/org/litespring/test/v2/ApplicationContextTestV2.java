@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.litespring.context.ApplicationContext;
 import org.litespring.context.support.ClassPathXmlApplicationContext;
+import org.litespring.dao.v2.AccountDao;
+import org.litespring.dao.v2.ItemDao;
 import org.litespring.service.v2.PetStoreService;
 
 public class ApplicationContextTestV2 {
@@ -14,5 +16,9 @@ public class ApplicationContextTestV2 {
         PetStoreService service = (PetStoreService) ctx.getBean("petStore");
         Assert.assertNotNull(service.getAccountDao());
         Assert.assertNotNull(service.getItemDao());
+
+        Assert.assertTrue(service.getAccountDao() instanceof AccountDao);
+        Assert.assertTrue(service.getItemDao() instanceof ItemDao);
+
     }
 }
