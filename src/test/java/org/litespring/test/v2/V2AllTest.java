@@ -10,7 +10,10 @@ import org.litespring.test.v1.ResourceTest;
 @Suite.SuiteClasses({
         ApplicationContextTestV2.class,
         BeanDefinitionTestV2.class,
-        BeanDefinitionValueResolverTest.class
+        BeanDefinitionValueResolverTest.class,
+        CustomBooleanEditorTest.class,
+        CustomNumberEditorTest.class,
+        TypeConverterTest.class
 })
 public class V2AllTest {
 }
