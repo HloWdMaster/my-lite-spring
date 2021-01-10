@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.litespring.context.ApplicationContext;
 import org.litespring.context.support.ClassPathXmlApplicationContext;
-import org.litespring.dao.v2.AccountDao;
-import org.litespring.dao.v2.ItemDao;
-import org.litespring.service.v2.PetStoreService;
+import org.litespring.dao.v3.AccountDao;
+import org.litespring.dao.v3.ItemDao;
+import org.litespring.service.v3.PetStoreService;
 
 public class ApplicationContextTestV3 {
 
@@ -20,7 +20,7 @@ public class ApplicationContextTestV3 {
         Assert.assertTrue(service.getAccountDao() instanceof AccountDao);
         Assert.assertTrue(service.getItemDao() instanceof ItemDao);
 
-        Assert.assertEquals("dadongge", service.getOwner());
+        Assert.assertEquals(1,service.getVersion());
 
     }
 }
