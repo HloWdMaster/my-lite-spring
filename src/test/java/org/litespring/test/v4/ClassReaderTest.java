@@ -40,7 +40,7 @@ public class ClassReaderTest {
         String annotation = "org.litespring.stereotype.Component";
         Assert.assertTrue(visitor.hasAnnotation(annotation));
 
-        AnnotationAttributes attribute = visitor.getaAnnotationAttributes(annotation);
+        AnnotationAttributes attribute = visitor.getAnnotationAttributes(annotation);
         Assert.assertEquals("petStore",attribute.get("value"));
     }
 
