@@ -6,7 +6,7 @@ import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.PropertyValue;
 import org.litespring.beans.factory.config.RuntimeBeanReference;
 import org.litespring.beans.factory.support.DefaultBeanFactory;
-import org.litespring.beans.factory.xml.XmlBeanDefinitonReader;
+import org.litespring.beans.factory.xml.XmlBeanDefinitionReader;
 import org.litespring.core.io.ClassPathResource;
 
 import java.util.List;
@@ -16,8 +16,8 @@ public class BeanDefinitionTestV2 {
     @Test
     public void testGetBeanDefinitoin() {
         DefaultBeanFactory factory = new DefaultBeanFactory();
-        XmlBeanDefinitonReader reader = new XmlBeanDefinitonReader(factory);
-        reader.loadBeanDefinition(new ClassPathResource("petstore-v2.xml"));
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
+        reader.loadBeanDefinitions(new ClassPathResource("petstore-v2.xml"));
 
         BeanDefinition bd = factory.getBeanDefinition("petStore");
         List<PropertyValue> pvs = bd.getPropertyValues();

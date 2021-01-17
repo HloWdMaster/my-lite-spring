@@ -1,7 +1,7 @@
 package org.litespring.context.support;
 
 import org.litespring.beans.factory.support.DefaultBeanFactory;
-import org.litespring.beans.factory.xml.XmlBeanDefinitonReader;
+import org.litespring.beans.factory.xml.XmlBeanDefinitionReader;
 import org.litespring.context.ApplicationContext;
 import org.litespring.core.io.Resource;
 import org.litespring.util.ClassUtils;
@@ -13,9 +13,9 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
 
     public AbstractApplicationContext(String configFile) {
         factory = new DefaultBeanFactory();
-        XmlBeanDefinitonReader reader = new XmlBeanDefinitonReader(factory);
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
         Resource resource = this.getResourceByPath(configFile);
-        reader.loadBeanDefinition(resource);
+        reader.loadBeanDefinitions(resource);
         factory.setBeanClassLoader(this.getBeanClassLoader());
     }
 

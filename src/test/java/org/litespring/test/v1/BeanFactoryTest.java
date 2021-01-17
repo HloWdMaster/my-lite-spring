@@ -7,7 +7,7 @@ import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.factory.BeanCreationException;
 import org.litespring.beans.factory.BeanDefinitionStoreException;
 import org.litespring.beans.factory.support.DefaultBeanFactory;
-import org.litespring.beans.factory.xml.XmlBeanDefinitonReader;
+import org.litespring.beans.factory.xml.XmlBeanDefinitionReader;
 import org.litespring.core.io.ClassPathResource;
 import org.litespring.core.io.Resource;
 import org.litespring.service.v1.PetStoreService;
@@ -17,19 +17,19 @@ import static org.junit.Assert.*;
 public class BeanFactoryTest {
 
     DefaultBeanFactory factory = null;
-    XmlBeanDefinitonReader reader = null;
+    XmlBeanDefinitionReader reader = null;
     Resource resource = new ClassPathResource("petstore-v1.xml");
     Resource invalidResource = new ClassPathResource("xxx.xml");
 
     @Before
     public void setUp() {
         factory = new DefaultBeanFactory();
-        reader = new XmlBeanDefinitonReader(factory);
+        reader = new XmlBeanDefinitionReader(factory);
     }
 
     @Test
     public void testGetBean() {
-        reader.loadBeanDefinition(resource);
+        reader.loadBeanDefinitions(resource);
         BeanDefinition bd = factory.getBeanDefinition("petStore");
 
         assertTrue(bd.isSingleton());
@@ -48,7 +48,7 @@ public class BeanFactoryTest {
 
     @Test
     public void testInvalidBean() {
-        reader.loadBeanDefinition(resource);
+        reader.loadBeanDefinitions(resource);
         try {
             factory.getBean("invalidBean");
         } catch (BeanCreationException e) {
@@ -61,7 +61,7 @@ public class BeanFactoryTest {
     public void invalidXML() {
 
         try {
-            reader.loadBeanDefinition(invalidResource);
+            reader.loadBeanDefinitions(invalidResource);
         } catch (BeanDefinitionStoreException e) {
             return;
         }
