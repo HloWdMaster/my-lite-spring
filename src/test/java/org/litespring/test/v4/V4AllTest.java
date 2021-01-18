@@ -5,10 +5,12 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        DependencyDescriptorTest.class,
         ApplicationContextV4.class,
+        AutowiredAnnotationProcessorTest.class,
         ClassPathBeanDefinitionScannerTest.class,
         ClassReaderTest.class,
+        DependencyDescriptorTest.class,
+        InjectionMetadataTest.class,
         MetadataReaderTest.class,
         PackageResourceLoaderTest.class,
         XmlBeanDefinitionReaderTest.class
