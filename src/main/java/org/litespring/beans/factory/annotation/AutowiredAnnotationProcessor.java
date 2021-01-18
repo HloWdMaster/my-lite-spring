@@ -1,6 +1,9 @@
 package org.litespring.beans.factory.annotation;
 
+import org.litespring.beans.BeansException;
+import org.litespring.beans.factory.BeanCreationException;
 import org.litespring.beans.factory.config.AutowireCapableBeanFactory;
+import org.litespring.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import org.litespring.context.annotation.InjectionElement;
 import org.litespring.util.AnnotationUtils;
 import org.litespring.util.ReflectionUtils;
@@ -14,7 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
-public class AutowiredAnnotationProcessor {
+public class AutowiredAnnotationProcessor implements InstantiationAwareBeanPostProcessor {
     private AutowireCapableBeanFactory beanFactory;
     private String requiredParameterName = "required";
     private boolean requiredParameterValue = true;
@@ -43,7 +46,6 @@ public class AutowiredAnnotationProcessor {
                     }
                     boolean requied = determineRequiredStatus(ann);
                     currElements.add(new AutowiredFieldElement(field, requied, beanFactory));
-
                 }
             }
             elements.addAll(0, currElements);
@@ -73,6 +75,37 @@ public class AutowiredAnnotationProcessor {
                 return ann;
             }
         }
+        return null;
+    }
+
+    @Override
+    public Object beforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
+        return null;
+    }
+
+    @Override
+    public boolean afterInstantiation(Object bean, String beanName) throws BeansException {
+        return false;
+    }
+
+    @Override
+    public void postProcessPropertyValues(Object bean, String beanName) throws BeansException {
+        InjectionMetadata metadata = buildAutowiringMetadata(bean.getClass());
+        try {
+            metadata.inject(bean);
+        } catch (Throwable e) {
+            throw new BeanCreationException(beanName,"Injection of autowired dependencies failed!");
+        }
+
+    }
+
+    @Override
+    public Object beforeInitialization(Object bean, String beanName) throws BeansException {
+        return null;
+    }
+
+    @Override
+    public Object afterInitialization(Object bean, String beanName) throws BeansException {
         return null;
     }
 }
