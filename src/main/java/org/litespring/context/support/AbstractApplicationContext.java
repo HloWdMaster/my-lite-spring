@@ -1,5 +1,6 @@
 package org.litespring.context.support;
 
+import org.litespring.beans.factory.NoSuchBeanDefinitionException;
 import org.litespring.beans.factory.annotation.AutowiredAnnotationProcessor;
 import org.litespring.beans.factory.annotation.AutowiredFieldElement;
 import org.litespring.beans.factory.config.ConfigurableBeanFactory;
@@ -45,4 +46,8 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
         beanFactory.addBeanPostProcessor(postProcessor);
     }
 
+    @Override
+    public Class<?> getType(String targetBeanName) throws NoSuchBeanDefinitionException {
+        return this.factory.getType(targetBeanName);
+    }
 }
