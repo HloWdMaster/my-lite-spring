@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.litespring.aop.aspectj.AspectJAfterReturningAdvice;
+import org.litespring.aop.aspectj.AspectJAfterThrowingAdvice;
 import org.litespring.aop.aspectj.AspectJBeforeAdvice;
 import org.litespring.aop.framework.ReflectiveMethodInvocation;
 import org.litespring.service.v5.PetStoreService;
@@ -19,6 +20,7 @@ public class ReflectiveMethodInvocationTest {
 
     private AspectJBeforeAdvice beforeAdvice = null;
     private AspectJAfterReturningAdvice afterReturningAdvice = null;
+    private AspectJAfterThrowingAdvice afterThrowingAdvice = null;
     private PetStoreService petStoreService = null;
     private TransactionManager tx;
 
@@ -33,6 +35,11 @@ public class ReflectiveMethodInvocationTest {
                 tx);
         afterReturningAdvice = new AspectJAfterReturningAdvice(
                 TransactionManager.class.getMethod("commit"),
+                null,
+                tx
+        );
+        afterThrowingAdvice = new AspectJAfterThrowingAdvice(
+                TransactionManager.class.getMethod("rollback"),
                 null,
                 tx
         );
@@ -56,6 +63,29 @@ public class ReflectiveMethodInvocationTest {
         Assert.assertEquals("place order",msgs.get(1));
         Assert.assertEquals("commit tx",msgs.get(2));
 
+    }
+
+    @Test
+    public void testAfetrThrowing()throws Throwable {
+        Method targetMethod = PetStoreService.class.getMethod("placeOrderWithException");
+        List<MethodInterceptor> interceptors = new ArrayList<MethodInterceptor>();
+        interceptors.add(afterThrowingAdvice);
+        interceptors.add(beforeAdvice);
+
+        ReflectiveMethodInvocation mi = new ReflectiveMethodInvocation(petStoreService,
+                targetMethod,new Object[0],interceptors
+        );
+        try {
+            mi.proceed();
+        } catch (Throwable t) {
+            List<String> msgs = MessageTracker.getMsgs();
+            Assert.assertEquals(2,msgs.size());
+            Assert.assertEquals("start tx",msgs.get(0));
+            Assert.assertEquals("rollback tx",msgs.get(1));
+            return;
+        }
+
+        Assert.fail("No Exception thrown");
     }
 
 }

@@ -6,26 +6,18 @@ import org.litespring.aop.Pointcut;
 
 import java.lang.reflect.Method;
 
-public class AspectJBeforeAdvice  implements Advice {
-    private Method adviceMethod;
-    private Pointcut pc;
-    private Object adviceObject;
+public class AspectJBeforeAdvice  extends AbstractAspectJAdvice {
+
 
     public AspectJBeforeAdvice(Method adviceMethod, Pointcut pc, Object adviceObject) {
-        this.adviceMethod = adviceMethod;
-        this.pc = pc;
-        this.adviceObject = adviceObject;
+        super(adviceMethod, pc, adviceObject);
     }
 
-    @Override
-    public Pointcut getPointcut() {
-        return pc;
-    }
 
     @Override
     public Object invoke(MethodInvocation mi) throws Throwable {
         //调用TransactionManager的start方法commit
-        adviceMethod.invoke(adviceObject);
+        this.invokeAdviceMethod();
         Object o = mi.proceed();
         return o;
     }
