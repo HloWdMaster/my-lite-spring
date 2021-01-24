@@ -1,0 +1,2 @@
+mvn install:install-file -DgroupId=org.spring -DartifactId=spring-core-cglib -Dversion=3.2.18 -Dpackaging=jar -Dfile=lib/spring-core-cglib-3.2.18.RELEASE.jar
+mvn install:install-file -DgroupId=org.spring -DartifactId=spring-core-cglib -Dversion=3.2.18 -Dpackaging=jar -Dfile=lib/spring-core-asm-3.2.18.RELEASE.jar
