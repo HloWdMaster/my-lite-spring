@@ -3,14 +3,15 @@ package org.litespring.aop.aspectj;
 import org.aopalliance.intercept.MethodInvocation;
 import org.litespring.aop.Advice;
 import org.litespring.aop.Pointcut;
+import org.litespring.aop.config.AspectInstanceFactory;
 
 import java.lang.reflect.Method;
 
 public class AspectJBeforeAdvice  extends AbstractAspectJAdvice {
 
 
-    public AspectJBeforeAdvice(Method adviceMethod, Pointcut pc, Object adviceObject) {
-        super(adviceMethod, pc, adviceObject);
+    public AspectJBeforeAdvice(Method adviceMethod, Pointcut pc, AspectInstanceFactory adviceObjectFactory) throws Exception {
+        super(adviceMethod, pc, adviceObjectFactory);
     }
 
 
