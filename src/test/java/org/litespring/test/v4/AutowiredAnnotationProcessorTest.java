@@ -18,6 +18,7 @@ import java.util.List;
 public class AutowiredAnnotationProcessorTest {
 
     DefaultBeanFactory beanFactory = new DefaultBeanFactory() {
+        @Override
         public Object resolveDependency(DependencyDescriptor descriptor) {
             if (descriptor.getDependencyType().equals(AccountDao.class)) {
                 return accountDao;

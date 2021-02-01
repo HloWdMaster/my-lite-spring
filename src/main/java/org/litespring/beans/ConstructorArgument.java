@@ -10,8 +10,8 @@ public class ConstructorArgument {
     public ConstructorArgument() {
     }
 
-    public void addArgumentValue(Object value,String type) {
-        this.argumentValues.add(new ValueHolder(value,type));
+    public void addArgumentValue(Object value) {
+        this.argumentValues.add(new ValueHolder(value));
     }
 
     public void addArgumentValue(ValueHolder valueHolder) {
