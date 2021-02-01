@@ -10,6 +10,8 @@ import org.litespring.context.ApplicationContext;
 import org.litespring.core.io.Resource;
 import org.litespring.util.ClassUtils;
 
+import java.util.List;
+
 public abstract class AbstractApplicationContext implements ApplicationContext {
 
     private DefaultBeanFactory factory = null;
@@ -49,5 +51,10 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
     @Override
     public Class<?> getType(String targetBeanName) throws NoSuchBeanDefinitionException {
         return this.factory.getType(targetBeanName);
+    }
+
+    @Override
+    public List<Object> getBeansByType(Class<?> type) {
+        return factory.getBeansByType(type);
     }
 }

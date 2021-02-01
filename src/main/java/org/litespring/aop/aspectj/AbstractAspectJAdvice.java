@@ -26,4 +26,11 @@ public abstract class AbstractAspectJAdvice implements Advice {
         return this.pc;
     }
 
+    public Object getAdviceInstance() throws Exception {
+        return adviceObjectFactory.getAspectInstance();
+    }
+
+    public  Method getAdviceMethod() {
+        return adviceMethod;
+    }
 }

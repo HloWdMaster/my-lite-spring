@@ -5,6 +5,8 @@ import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.PropertyValue;
 import org.litespring.beans.SimpleTypeConverter;
 import org.litespring.beans.factory.BeanCreationException;
+import org.litespring.beans.factory.BeanFactory;
+import org.litespring.beans.factory.BeanFactoryAware;
 import org.litespring.beans.factory.NoSuchBeanDefinitionException;
 import org.litespring.beans.factory.config.BeanPostProcessor;
 import org.litespring.beans.factory.config.ConfigurableBeanFactory;
@@ -69,14 +71,48 @@ public class DefaultBeanFactory extends AbstractBeanFactory
     }
 
     @Override
+    public List<Object> getBeansByType(Class<?> type) {
+        List<Object> result = new ArrayList<Object>();
+        List<String> beanIDs = this.getBeanIDsByType(type);
+        for (String beanID : beanIDs) {
+            result.add(this.getBean(beanID));
+        }
+        return result;
+    }
+
+    private List<String> getBeanIDsByType(Class<?> type) {
+        List<String> result = new ArrayList<String>();
+        for (String beanName : this.beanDefinitionMap.keySet()) {
+            if (type.isAssignableFrom(this.getType(beanName))) {
+                result.add(beanName);
+            }
+        }
+        return result;
+    }
+
+    @Override
     protected Object createBean(BeanDefinition bd) {
         //创建实例
         Object bean = instantiateBean(bd);
         //设置属性
         populateBean(bd, bean);
         //
+        bean = initializeBean(bd, bean);
 //        populateBeanUserCommBeanUtils(bd, bean);
         return bean;
+    }
+
+    protected Object initializeBean(BeanDefinition bd,Object bean) {
+        invokeAwareMethods(bean);
+        //TODO 对bean初始化
+        //创建代理
+        return bean;
+    }
+
+    private void invokeAwareMethods(final Object bean) {
+        if (bean instanceof BeanFactoryAware) {
+            ((BeanFactoryAware)bean).setBeanFactory(this);
+        }
     }
 
     private void populateBeanUserCommBeanUtils(BeanDefinition bd, Object bean) {

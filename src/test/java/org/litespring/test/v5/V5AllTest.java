@@ -6,6 +6,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ApplicationContextTest5.class,
+        BeanDefinitionTestV5.class,
         CglibAopProxyTest.class,
         CGLibTest.class,
         MethodLocatingFactoryTest.class,
