@@ -11,7 +11,7 @@ import org.litespring.util.MessageTracker;
 
 import java.util.List;
 
-public class ApplicationContextV6 {
+public class ApplicationContextTestV6 {
 
     @Before
     public void setup() {

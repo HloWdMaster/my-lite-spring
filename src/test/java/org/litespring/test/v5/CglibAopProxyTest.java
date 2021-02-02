@@ -64,4 +64,9 @@ public class CglibAopProxyTest extends AbstractV5Test{
         Assert.assertEquals("commit tx",msgs.get(2));
     }
 
+    @Before
+    public void cleardata() {
+        MessageTracker.clearMsg();
+    }
+
 }

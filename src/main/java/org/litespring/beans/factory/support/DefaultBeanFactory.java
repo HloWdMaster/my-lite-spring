@@ -1,16 +1,16 @@
 package org.litespring.beans.factory.support;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.BeansException;
 import org.litespring.beans.PropertyValue;
 import org.litespring.beans.SimpleTypeConverter;
 import org.litespring.beans.factory.BeanCreationException;
-import org.litespring.beans.factory.BeanFactory;
 import org.litespring.beans.factory.BeanFactoryAware;
 import org.litespring.beans.factory.NoSuchBeanDefinitionException;
 import org.litespring.beans.factory.config.BeanPostProcessor;
-import org.litespring.beans.factory.config.ConfigurableBeanFactory;
 import org.litespring.beans.factory.config.DependencyDescriptor;
 import org.litespring.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import org.litespring.util.ClassUtils;
@@ -24,7 +24,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultBeanFactory extends AbstractBeanFactory
-        implements  BeanDefinitionRegistry {
+        implements BeanDefinitionRegistry {
+    private static final Log logger = LogFactory.getLog(DefaultBeanFactory.class);
 
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>(64);
     private ClassLoader beanClassLoader;
@@ -84,7 +85,14 @@ public class DefaultBeanFactory extends AbstractBeanFactory
     private List<String> getBeanIDsByType(Class<?> type) {
         List<String> result = new ArrayList<String>();
         for (String beanName : this.beanDefinitionMap.keySet()) {
-            if (type.isAssignableFrom(this.getType(beanName))) {
+            Class<?> beanClass = null;
+            try {
+                beanClass = this.getType(beanName);
+            } catch (Exception e) {
+                logger.warn("can't load class for bean :"+beanName+" skip it.");
+                continue;
+            }
+            if ((beanClass != null) && type.isAssignableFrom(beanClass)) {
                 result.add(beanName);
             }
         }
@@ -103,12 +111,12 @@ public class DefaultBeanFactory extends AbstractBeanFactory
         return bean;
     }
 
-    protected Object initializeBean(BeanDefinition bd,Object bean) {
+    protected Object initializeBean(BeanDefinition bd, Object bean) {
         invokeAwareMethods(bean);
         //TODO 对bean初始化
         //创建代理
-        if(!bd.isSynthetic()){
-            return applyBeanPostProcessorsAfterInitialization(bean,bd.getID());
+        if (!bd.isSynthetic()) {
+            return applyBeanPostProcessorsAfterInitialization(bean, bd.getID());
         }
         return bean;
     }
@@ -128,7 +136,7 @@ public class DefaultBeanFactory extends AbstractBeanFactory
 
     private void invokeAwareMethods(final Object bean) {
         if (bean instanceof BeanFactoryAware) {
-            ((BeanFactoryAware)bean).setBeanFactory(this);
+            ((BeanFactoryAware) bean).setBeanFactory(this);
         }
     }
 
@@ -143,7 +151,7 @@ public class DefaultBeanFactory extends AbstractBeanFactory
                 String propertyName = pv.getName();
                 Object originalValue = pv.getValue();
                 Object resolvedValue = valueResolver.resolveValueIfNecessary(originalValue);
-                BeanUtils.setProperty(bean,propertyName,resolvedValue);
+                BeanUtils.setProperty(bean, propertyName, resolvedValue);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -154,7 +162,7 @@ public class DefaultBeanFactory extends AbstractBeanFactory
     protected void populateBean(BeanDefinition bd, Object bean) {
         for (BeanPostProcessor processor : this.getBeanPostProcessors()) {
             if (processor instanceof InstantiationAwareBeanPostProcessor) {
-                ((InstantiationAwareBeanPostProcessor) processor).postProcessPropertyValues(bean,bd.getID());
+                ((InstantiationAwareBeanPostProcessor) processor).postProcessPropertyValues(bean, bd.getID());
             }
         }
 
@@ -174,7 +182,7 @@ public class DefaultBeanFactory extends AbstractBeanFactory
                 for (PropertyDescriptor pd : pds) {
                     if (pd.getName().equals(propertyName)) {
                         Object converted = converter.convertIfNecessary(resolvedValue, pd.getPropertyType());
-                        pd.getWriteMethod().invoke(bean,converted);
+                        pd.getWriteMethod().invoke(bean, converted);
                     }
                 }
             }
@@ -188,7 +196,7 @@ public class DefaultBeanFactory extends AbstractBeanFactory
         if (bd.hasConstructorArgumentValues()) {
             ConstructorResolver resolver = new ConstructorResolver(this);
             return resolver.autowireConstructor(bd);
-        }else{
+        } else {
             ClassLoader cl = this.getBeanClassLoader();
             String beanClassName = bd.getBeanClassName();
             try {
@@ -241,7 +249,7 @@ public class DefaultBeanFactory extends AbstractBeanFactory
             try {
                 bd.resolveBeanClass(this.getBeanClassLoader());
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException("can't load class:"+bd.getBeanClassName());
+                throw new RuntimeException("can't load class:" + bd.getBeanClassName());
             }
         }
     }
